@@ -1,0 +1,39 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: Float
+  uuid: String
+  email: String
+  type: Role
+  fullName: String
+  username: String
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+type Query {
+  user(where: UserWhereUniqueInput!): User!
+}
+
+input UserWhereUniqueInput {
+  uuid: String
+  username: String
+  email: String
+}
+
+type Mutation {
+  createUser(data: UserCreateInput!): User!
+}
+
+input UserCreateInput {
+  type: Role!
+  email: String!
+  username: String!
+  passwordHash: String!
+  fullName: String!
+}
