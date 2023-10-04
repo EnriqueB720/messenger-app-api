@@ -1,12 +1,12 @@
-import { v4 as uuidv4 } from 'uuid';
-
 import { Injectable } from '@nestjs/common';
 
 import { User, UserSelect } from './model';
 
 import { UserArgs, UserCreateInput } from './dto';
 
-import { PrismaService } from 'src/shared/datasource/prisma/prisma.service';
+import { PrismaService } from '@prisma-datasource';
+
+
 
 @Injectable()
 export class UserService {
@@ -34,10 +34,7 @@ export class UserService {
     { select }: UserSelect,
   ): Promise<User> {
     return this.prismaService.user.create({
-      data: {
-        ...data,
-        uuid: uuidv4()
-      },
+      data,
       select,
     });
   }

@@ -6,7 +6,7 @@ import { UserArgs, UserCreateInput } from './dto';
 
 import { UserService } from './user.service';
 
-import { GraphQLFields, IGraphQLFields } from '../../shared/decorators';
+import { GraphQLFields, IGraphQLFields } from '@decorators';
 
 
 @Resolver(() => User)

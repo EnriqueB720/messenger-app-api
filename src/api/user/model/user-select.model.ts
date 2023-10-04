@@ -3,6 +3,7 @@ interface UserPrismaSelect {
   uuid?: boolean;
   email?: boolean;
   type?: boolean;
+  phoneNumber?: boolean;
   username?: boolean;
   fullName?: boolean;
 }

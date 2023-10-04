@@ -11,3 +11,9 @@ export class UserWhereUniqueInput {
   @Field(() => String, { nullable: true })
   email: string;
 }
+
+@InputType()
+export class UserCreateNestedOneWithoutContactsInput {
+  @Field(() => UserWhereUniqueInput)
+  connect: UserWhereUniqueInput
+}

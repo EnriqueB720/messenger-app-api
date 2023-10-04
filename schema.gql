@@ -2,13 +2,23 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Contact {
+  userId: Float
+  contactUserId: Float
+  fullName: String
+  isFavorite: Boolean
+  isBlocked: Boolean
+}
+
 type User {
   id: Float
   uuid: String
   email: String
+  phoneNumber: Int
   type: Role
   fullName: String
   username: String
+  contacts: [Contact!]
 }
 
 enum Role {
@@ -18,6 +28,7 @@ enum Role {
 
 type Query {
   user(where: UserWhereUniqueInput!): User!
+  contact(where: ContactWhereUniqueInput!): Contact!
 }
 
 input UserWhereUniqueInput {
@@ -26,14 +37,32 @@ input UserWhereUniqueInput {
   email: String
 }
 
+input ContactWhereUniqueInput {
+  userId: Int!
+  contactUserId: Int!
+}
+
 type Mutation {
   createUser(data: UserCreateInput!): User!
+  createContact(data: ContactCreateInput!): Contact!
 }
 
 input UserCreateInput {
   type: Role!
   email: String!
+  phoneNumber: Int!
   username: String!
   passwordHash: String!
   fullName: String!
+}
+
+input ContactCreateInput {
+  firstName: String!
+  lastName: String!
+  phoneNumber: Int!
+  user: UserCreateNestedOneWithoutContactsInput!
+}
+
+input UserCreateNestedOneWithoutContactsInput {
+  connect: UserWhereUniqueInput!
 }

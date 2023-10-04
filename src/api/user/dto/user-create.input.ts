@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { Role } from '@prisma/client';
 
 import { IsEmail, MaxLength, MinLength } from 'class-validator';
@@ -11,6 +11,9 @@ export class UserCreateInput {
   @IsEmail()
   @Field(() => String)
   email: string;
+
+  @Field(() => Int)
+  phoneNumber: number;
 
   @MinLength(4)
   @MaxLength(60)
