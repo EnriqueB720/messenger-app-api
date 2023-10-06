@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { Contact, ContactSelect } from './model';
 
-import { ContactArgs, ContactCreateInput } from './dto';
+import { ContactArgs, ContactCreateInput, ContactUpdateInput } from './dto';
 
 import { PrismaService } from '@prisma-datasource';
 import { BadRequestException } from '@nestjs/common/exceptions';
@@ -55,5 +55,37 @@ export class ContactService {
       },
       select,
     });
+  }
+
+  public async update(
+    { where }: ContactArgs,
+    { select }: ContactSelect,
+      data: ContactUpdateInput
+  ):
+   Promise<Contact>{
+    return this.prismaService.contact.update({
+      data: {
+        fullName: `${data.firstName} ${data.lastName}`,
+        isBlocked: data.isBlocked,
+        isFavorite: data.isFavorite
+      },
+      select,
+      where: {
+        contactUserId_userId: where
+      }
+    })
+  }
+
+  public async delete(
+    { where }: ContactArgs,
+    { select }: ContactSelect,
+  ):
+   Promise<Contact>{
+    return this.prismaService.contact.delete({
+      select,
+      where: {
+        contactUserId_userId: where
+      }
+    })
   }
 }

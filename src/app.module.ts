@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 
-
+//Apis
 import { UserModule } from './api/user/user.module';
 import { ContactModule } from './api/contact/contact.module';
+import { ChatModule } from './api/chat/chat.module';
 //Shared
 import { ConfigModule } from 'src/shared/config/config.module';
 import { PrismaModule } from './shared/datasource/prisma/prisma.module';
@@ -11,7 +12,8 @@ import { PrismaModule } from './shared/datasource/prisma/prisma.module';
   imports: [ConfigModule,
             UserModule,
             PrismaModule,
-            ContactModule],
+            ContactModule,
+            ChatModule],
   controllers: [],
   providers: [],
 })

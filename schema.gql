@@ -26,9 +26,24 @@ enum Role {
   ADMIN
 }
 
+type Chat {
+  id: Float
+  uuid: String
+  name: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  isGroup: Boolean
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Query {
   user(where: UserWhereUniqueInput!): User!
   contact(where: ContactWhereUniqueInput!): Contact!
+  chat(where: ChatWhereUniqueInput!): Chat!
 }
 
 input UserWhereUniqueInput {
@@ -42,9 +57,15 @@ input ContactWhereUniqueInput {
   contactUserId: Int!
 }
 
+input ChatWhereUniqueInput {
+  id: Int
+  uuid: String
+}
+
 type Mutation {
   createUser(data: UserCreateInput!): User!
   createContact(data: ContactCreateInput!): Contact!
+  createChat(data: ChatCreateInput!): Chat!
 }
 
 input UserCreateInput {
@@ -65,4 +86,9 @@ input ContactCreateInput {
 
 input UserCreateNestedOneWithoutContactsInput {
   connect: UserWhereUniqueInput!
+}
+
+input ChatCreateInput {
+  name: String!
+  isGroup: Boolean
 }

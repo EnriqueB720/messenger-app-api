@@ -3,10 +3,10 @@ import { UserWhereUniqueInput } from 'src/api/user/dto';
 
 @InputType()
 export class ChatWhereUniqueInput {
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   id: number;
 
-  @Field(() => String)
-  uuid: string;
+  @Field(() => String, { nullable: true })
+  uuid?: string;
 
 }

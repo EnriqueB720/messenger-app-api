@@ -46,7 +46,7 @@ model Chat {
   uuid         String            @unique @default(uuid())
   name         String            @map("chat_name") @db.VarChar(150)
   createdAt    DateTime          @default(now()) @map("created_at")
-  updateAt     DateTime          @updatedAt @map("update_at")
+  updatedAt     DateTime          @updatedAt @map("updated_at")
   isGroup      Boolean           @default(false) @map("is_group")
   participants ChatParticipant[]
   messages     Message[]
