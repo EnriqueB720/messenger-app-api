@@ -2,7 +2,7 @@ import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 
 import { Chat, ChatSelect } from './model';
 
-import { ChatArgs, ChatCreateInput } from './dto';
+import { ChatArgs, ChatCreateInput, ChatsArgs } from './dto';
 
 import { ChatService } from './chat.service';
 
@@ -13,12 +13,12 @@ import { GraphQLFields, IGraphQLFields } from '@decorators';
 export class ChatResolver {
   constructor(private readonly chatService: ChatService) {}
 
-  @Query(() => Chat)
-  public async chat(
-    @Args() args: ChatArgs,
+  @Query(() => [Chat])
+  public async Chats(
+    @Args() args: ChatsArgs,
     @GraphQLFields() { fields }: IGraphQLFields<ChatSelect>,
-  ): Promise<Chat> {
-    return this.chatService.findOne(args, fields);
+  ): Promise<Chat[]> {
+    return this.chatService.findMany(args, fields);
   }
 
   @Mutation(() => Chat)

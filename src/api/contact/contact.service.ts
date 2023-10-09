@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { Contact, ContactSelect } from './model';
 
-import { ContactArgs, ContactCreateInput, ContactUpdateInput } from './dto';
+import { ContactArgs, ContactCreateInput, ContactsArgs, ContactUpdateInput } from './dto';
 
 import { PrismaService } from '@prisma-datasource';
 import { BadRequestException } from '@nestjs/common/exceptions';
@@ -24,6 +24,23 @@ export class ContactService {
       select,
     });
   }
+
+  public async findMany(
+    args: ContactsArgs,
+    { select }: ContactSelect,
+  ): Promise<Contact[]> {
+    return this.prismaService.contact.findMany({
+      ...args,
+      select,
+      cursor: {
+        contactUserId_userId: args.cursor
+      },
+      where: {
+        ...args.where
+      }
+    });
+  }
+
 
   public async create(
     data: ContactCreateInput,

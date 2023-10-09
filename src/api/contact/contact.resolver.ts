@@ -2,23 +2,24 @@ import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 
 import { Contact, ContactSelect } from './model';
 
-import { ContactArgs, ContactCreateInput } from './dto';
+import { ContactCreateInput } from './dto';
 
 import { ContactService } from './contact.service';
 
 import { GraphQLFields, IGraphQLFields } from '@decorators';
+import { ContactsArgs } from './dto/contacts.args';
 
 
 @Resolver(() => Contact)
 export class ContactResolver {
   constructor(private readonly contactService: ContactService) { }
 
-  @Query(() => Contact)
-  public async contact(
-    @Args() args: ContactArgs,
+  @Query(() => [Contact])
+  public async Contacts(
+    @Args() args: ContactsArgs,
     @GraphQLFields() { fields }: IGraphQLFields<ContactSelect>,
-  ): Promise<Contact> {
-    return this.contactService.findOne(args, fields);
+  ): Promise<Contact[]> {
+    return this.contactService.findMany(args, fields);
   }
 
   @Mutation(() => Contact)

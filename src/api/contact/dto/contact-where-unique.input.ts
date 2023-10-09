@@ -2,10 +2,10 @@ import { InputType, Field, Int } from '@nestjs/graphql';
 
 @InputType()
 export class ContactWhereUniqueInput {
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   userId: number;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   contactUserId: number;
 
 }

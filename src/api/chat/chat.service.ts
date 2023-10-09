@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { Chat, ChatSelect } from './model';
 
-import { ChatArgs, ChatCreateInput } from './dto';
+import { ChatArgs, ChatCreateInput, ChatsArgs } from './dto';
 
 import { PrismaService } from '@prisma-datasource';
 
@@ -17,6 +17,19 @@ export class ChatService {
     return this.prismaService.chat.findUnique({
       where,
       select,
+    });
+  }
+
+  public async findMany(
+    args: ChatsArgs,
+    { select }: ChatSelect,
+  ): Promise<Chat[]> {
+    return this.prismaService.chat.findMany({
+      ...args,
+      select,
+      where: {
+        ...args.where
+      }
     });
   }
 
