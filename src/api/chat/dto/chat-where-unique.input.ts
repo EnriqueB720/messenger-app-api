@@ -1,5 +1,4 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
-import { UserWhereUniqueInput } from 'src/api/user/dto';
 
 @InputType()
 export class ChatWhereUniqueInput {
@@ -8,5 +7,10 @@ export class ChatWhereUniqueInput {
 
   @Field(() => String, { nullable: true })
   uuid?: string;
+}
 
+@InputType()
+export class ChatCreateNestedOneWithoutMessagesInput {
+  @Field(() => ChatWhereUniqueInput)
+  connect: ChatWhereUniqueInput
 }

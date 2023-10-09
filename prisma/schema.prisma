@@ -46,7 +46,7 @@ model Chat {
   uuid         String            @unique @default(uuid())
   name         String            @map("chat_name") @db.VarChar(150)
   createdAt    DateTime          @default(now()) @map("created_at")
-  updatedAt     DateTime          @updatedAt @map("updated_at")
+  updatedAt    DateTime          @updatedAt @map("updated_at")
   isGroup      Boolean           @default(false) @map("is_group")
   participants ChatParticipant[]
   messages     Message[]
@@ -71,13 +71,13 @@ model Message {
   senderId          Int                @map("sender_id")
   text              String             @map("message_text")
   createdAt         DateTime           @default(now()) @map("created_at")
-  updateAt          DateTime           @updatedAt @map("update_at")
-  replyMessageId    Int                @map("reply_message_id")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+  replyMessageId    Int?               @map("reply_message_id")
   attachment        Attachment?
   userMessageStatus UserMessageStatus?
   chat              Chat               @relation(fields: [chatId], references: [id])
   sender            User               @relation(fields: [senderId], references: [id])
-  replyMessage      Message            @relation("replyMessage", fields: [replyMessageId], references: [id])
+  replyMessage      Message?           @relation("replyMessage", fields: [replyMessageId], references: [id])
   replyMessages     Message[]          @relation("replyMessage")
 
   @@map("messages")

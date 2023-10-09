@@ -5,9 +5,6 @@ import { Chat, ChatSelect } from './model';
 import { ChatArgs, ChatCreateInput } from './dto';
 
 import { PrismaService } from '@prisma-datasource';
-import { BadRequestException } from '@nestjs/common/exceptions';
-
-
 
 @Injectable()
 export class ChatService {

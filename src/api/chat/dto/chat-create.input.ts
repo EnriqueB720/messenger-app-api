@@ -7,8 +7,7 @@ export class ChatCreateInput {
     @MaxLength(100)
     @Field(() => String)
     name: string;
-
-    @MaxLength(100)
+    
     @Field(() => Boolean, { nullable: true })
     isGroup: boolean;
 }
