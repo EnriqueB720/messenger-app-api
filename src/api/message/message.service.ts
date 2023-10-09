@@ -17,7 +17,9 @@ export class MessageService {
     { select }: MessageSelect,
   ): Promise<Message> {
     return this.prismaService.message.findUnique({
-      where,
+      where:{
+        id: where.id
+      },
       select,
     });
   }
@@ -28,7 +30,10 @@ export class MessageService {
   ): Promise<Message[]> {
     return this.prismaService.message.findMany({
       ...args,
-      select
+      select,
+      where: {
+        ...args.where
+      }
     });
   }
 

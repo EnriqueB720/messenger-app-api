@@ -10,6 +10,22 @@ type Contact {
   isBlocked: Boolean
 }
 
+type Message {
+  id: Float
+  uuid: String
+  chatId: Float
+  senderId: Float
+  text: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  replyMessageId: Float
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type User {
   id: Float
   uuid: String
@@ -19,6 +35,7 @@ type User {
   fullName: String
   username: String
   contacts: [Contact!]
+  messages: [Message!]
 }
 
 enum Role {
@@ -33,17 +50,14 @@ type Chat {
   createdAt: DateTime
   updatedAt: DateTime
   isGroup: Boolean
+  messages: [Message!]
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type Query {
   user(where: UserWhereUniqueInput!): User!
-  contact(where: ContactWhereUniqueInput!): Contact!
-  chat(where: ChatWhereUniqueInput!): Chat!
+  Contacts(skip: Int, take: Int, cursor: ContactWhereUniqueInput, orderBy: ContactOrderByInput, where: ContactWhereInput): [Contact!]!
+  Chats(skip: Int, take: Int, cursor: ChatWhereUniqueInput, orderBy: ChatOrderByInput, where: ChatWhereInput): [Chat!]!
+  messages(skip: Int, take: Int, cursor: MessageWhereUniqueInput, orderBy: MessageOrderByInput, where: MessageWhereInput): [Message!]!
 }
 
 input UserWhereUniqueInput {
@@ -53,8 +67,27 @@ input UserWhereUniqueInput {
 }
 
 input ContactWhereUniqueInput {
-  userId: Int!
-  contactUserId: Int!
+  userId: Int
+  contactUserId: Int
+}
+
+input ContactOrderByInput {
+  fullName: OrderByArg
+  isFavorite: OrderByArg
+  isBlocked: OrderByArg
+}
+
+enum OrderByArg {
+  ASC
+  DESC
+}
+
+input ContactWhereInput {
+  userId: Int
+  contactUserId: Int
+  fullName: String
+  isFavorite: Boolean
+  isBlocked: Boolean
 }
 
 input ChatWhereUniqueInput {
@@ -62,10 +95,49 @@ input ChatWhereUniqueInput {
   uuid: String
 }
 
+input ChatOrderByInput {
+  createdAt: OrderByArg
+  updatedAt: OrderByArg
+  name: OrderByArg
+}
+
+input ChatWhereInput {
+  id: Int
+  uuid: String
+  name: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  isGroup: Boolean
+}
+
+input MessageWhereUniqueInput {
+  id: Int
+  uuid: String
+  senderId: Int
+  chatId: Int
+  replyMessageId: Int
+}
+
+input MessageOrderByInput {
+  createdAt: OrderByArg
+}
+
+input MessageWhereInput {
+  id: Int
+  uuid: String
+  senderId: Int
+  chatId: Int
+  test: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  replyMessageId: Int
+}
+
 type Mutation {
   createUser(data: UserCreateInput!): User!
   createContact(data: ContactCreateInput!): Contact!
   createChat(data: ChatCreateInput!): Chat!
+  createMessage(data: MessageCreateInput!): Message!
 }
 
 input UserCreateInput {
@@ -91,4 +163,18 @@ input UserCreateNestedOneWithoutContactsInput {
 input ChatCreateInput {
   name: String!
   isGroup: Boolean
+}
+
+input MessageCreateInput {
+  text: String!
+  chat: ChatCreateNestedOneWithoutMessagesInput!
+  sender: UserCreateNestedOneWithoutMessagesInput!
+}
+
+input ChatCreateNestedOneWithoutMessagesInput {
+  connect: ChatWhereUniqueInput!
+}
+
+input UserCreateNestedOneWithoutMessagesInput {
+  connect: UserWhereUniqueInput!
 }

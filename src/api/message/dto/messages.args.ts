@@ -3,6 +3,7 @@ import { ArgsType, Field, Int } from '@nestjs/graphql';
 
 import { MessageWhereUniqueInput } from './message-where-unique.input';
 import { MessageOrderByInput } from './message-order-by.input';
+import { MessageWhereInput } from './message-where.input';
 
 
 @ArgsType()
@@ -25,4 +26,8 @@ export class MessagesArgs {
   @IsOptional()
   @Field(() => MessageOrderByInput, { nullable: true })
   orderBy?: MessageOrderByInput;
+
+  @IsOptional()
+  @Field(() => MessageWhereInput, { nullable: true })
+  where?: MessageWhereInput;
 }

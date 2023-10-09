@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Message } from 'src/api/message/model';
 
 @ObjectType()
 export class Chat {
@@ -19,4 +20,7 @@ export class Chat {
 
   @Field(() => Boolean, { nullable: true })
   isGroup?: boolean;
+
+  @Field(() => [Message], { nullable: true })
+  messages?: Message[];
 }

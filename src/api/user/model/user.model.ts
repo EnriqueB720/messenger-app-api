@@ -1,6 +1,7 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Role } from '@prisma/client';
 import { Contact } from 'src/api/contact/model';
+import { Message } from 'src/api/message/model';
 
 @ObjectType()
 export class User {
@@ -27,6 +28,9 @@ export class User {
 
   @Field(() => [Contact], { nullable: true })
   contacts?: Contact[];
+
+  @Field(() => [Message], { nullable: true })
+  messages?: Message[];
 }
 
 registerEnumType(Role, {

@@ -5,7 +5,7 @@ import { IsOptional } from 'class-validator';
 export class ChatWhereInput {
   @IsOptional()
   @Field(() => Int, { nullable: true })
-  Id?: number;
+  id?: number;
 
   @IsOptional()
   @Field(() => String, { nullable: true })
