@@ -61,6 +61,7 @@ type Query {
 }
 
 input UserWhereUniqueInput {
+  id: Int
   uuid: String
   username: String
   email: String
@@ -137,7 +138,7 @@ type Mutation {
   createUser(data: UserCreateInput!): User!
   createContact(data: ContactCreateInput!): Contact!
   createChat(data: ChatCreateInput!): Chat!
-  createMessage(data: MessageCreateInput!): Message!
+  createDirectMessage(data: DirectMessageCreateInput!): Message!
 }
 
 input UserCreateInput {
@@ -165,14 +166,10 @@ input ChatCreateInput {
   isGroup: Boolean
 }
 
-input MessageCreateInput {
+input DirectMessageCreateInput {
   text: String!
-  chat: ChatCreateNestedOneWithoutMessagesInput!
+  contact: ContactWhereUniqueInput!
   sender: UserCreateNestedOneWithoutMessagesInput!
-}
-
-input ChatCreateNestedOneWithoutMessagesInput {
-  connect: ChatWhereUniqueInput!
 }
 
 input UserCreateNestedOneWithoutMessagesInput {

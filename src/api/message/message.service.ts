@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { Message, MessageSelect } from './model';
 
-import { MessageArgs, MessageCreateInput, MessagesArgs } from './dto';
+import { DirectMessageCreateInput, MessageArgs, MessagesArgs } from './dto';
 
 import { PrismaService } from '@prisma-datasource';
 
@@ -17,7 +17,7 @@ export class MessageService {
     { select }: MessageSelect,
   ): Promise<Message> {
     return this.prismaService.message.findUnique({
-      where:{
+      where: {
         id: where.id
       },
       select,
@@ -37,12 +37,48 @@ export class MessageService {
     });
   }
 
-  public async create(
-    data: MessageCreateInput,
+  public async createDirectMessage(
+    { contact, ...data }: DirectMessageCreateInput,
     { select }: MessageSelect,
   ): Promise<Message> {
+
+    let chat = await this.prismaService.chat.findFirst({
+      select: {
+        id: true
+      },
+      where: {
+        AND: [
+          { isGroup: false },
+          { participants: { some: { userId: contact.userId } } },
+          { participants: { some: { userId: contact.contactUserId } } },
+        ]
+      }
+    });
+
+    if(!chat){
+      chat = await this.prismaService.chat.create({
+        data: {
+          participants: { //Auto uses the chat id of the chat we are creating
+            create: [{userId: contact.userId},
+                     {userId: contact.contactUserId}]
+          },
+          name: `${contact.userId}/${contact.contactUserId}-single-chat`
+        },
+        select: {
+          id: true
+        }
+      })
+    }
+
     return this.prismaService.message.create({
-      data,
+      data: {
+        ...data,
+        chat: {
+          connect: {
+            id: chat.id
+          }
+        }
+      },
       select,
     });
   }
