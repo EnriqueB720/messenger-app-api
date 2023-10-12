@@ -139,6 +139,7 @@ type Mutation {
   createContact(data: ContactCreateInput!): Contact!
   createChat(data: ChatCreateInput!): Chat!
   createDirectMessage(data: DirectMessageCreateInput!): Message!
+  createGrouptMessage(data: GroupMessageCreateInput!): Message!
 }
 
 input UserCreateInput {
@@ -174,4 +175,14 @@ input DirectMessageCreateInput {
 
 input UserCreateNestedOneWithoutMessagesInput {
   connect: UserWhereUniqueInput!
+}
+
+input GroupMessageCreateInput {
+  text: String!
+  chat: ChatCreateNestedOneWithoutMessagesInput!
+  sender: UserCreateNestedOneWithoutMessagesInput!
+}
+
+input ChatCreateNestedOneWithoutMessagesInput {
+  connect: ChatWhereUniqueInput!
 }

@@ -2,7 +2,7 @@ import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 
 import { Message, MessageSelect } from './model';
 
-import { DirectMessageCreateInput } from './dto';
+import { DirectMessageCreateInput, GroupMessageCreateInput } from './dto';
 
 import { MessageService } from './message.service';
 
@@ -30,6 +30,12 @@ export class MessageResolver {
     return this.messageService.createDirectMessage(data, fields);
   }
 
-  //para un group se ocupa awebo el chat
-  //create direct message recibe el contactId
+  @Mutation(() => Message)
+  public async createGrouptMessage(
+    @Args('data') data: GroupMessageCreateInput,
+    @GraphQLFields() { fields }: IGraphQLFields<MessageSelect>,
+  ): Promise<Message> {
+    return this.messageService.createGroupMessage(data, fields);
+  }
+
 }

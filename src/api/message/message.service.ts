@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { Message, MessageSelect } from './model';
 
-import { DirectMessageCreateInput, MessageArgs, MessagesArgs } from './dto';
+import { DirectMessageCreateInput, GroupMessageCreateInput, MessageArgs, MessagesArgs } from './dto';
 
 import { PrismaService } from '@prisma-datasource';
 
@@ -55,12 +55,12 @@ export class MessageService {
       }
     });
 
-    if(!chat){
+    if (!chat) {
       chat = await this.prismaService.chat.create({
         data: {
           participants: { //Auto uses the chat id of the chat we are creating
-            create: [{userId: contact.userId},
-                     {userId: contact.contactUserId}]
+            create: [{ userId: contact.userId },
+            { userId: contact.contactUserId }]
           },
           name: `${contact.userId}/${contact.contactUserId}-single-chat`
         },
@@ -78,6 +78,40 @@ export class MessageService {
             id: chat.id
           }
         }
+      },
+      select,
+    });
+  }
+
+  public async createGroupMessage(
+    data: GroupMessageCreateInput,
+    { select }: MessageSelect,
+  ): Promise<Message> {
+
+    let chat = await this.prismaService.chat.findFirst({
+      select: {
+        id: true
+      },
+      where: {
+        isGroup: true,
+        id: data.chat.connect.id,
+        participants: {
+          some: {
+            userId: data.sender.connect.id
+          }
+        }
+      }
+    });
+
+    if(!chat){
+      throw new BadRequestException("You are not part of this chat");
+    }
+
+    return this.prismaService.message.create({
+      data: {
+        ...data,
+        chat: data.chat,
+        sender: data.sender
       },
       select,
     });
