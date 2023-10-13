@@ -2,7 +2,7 @@ import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 
 import { Chat, ChatSelect } from './model';
 
-import { ChatArgs, ChatCreateInput, ChatsArgs } from './dto';
+import { ChatCreateInput, ChatsArgs } from './dto';
 
 import { ChatService } from './chat.service';
 
