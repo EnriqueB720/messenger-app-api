@@ -42,4 +42,23 @@ export class ChatService {
       select,
     });
   }
+
+  public async createGroupChat(
+    data: ChatCreateInput,
+    { select }: ChatSelect,
+  ): Promise<Chat> {
+    return this.prismaService.chat.create({
+      data: {
+        name: data.name,
+        isGroup: true,
+        participants: {
+          createMany: {
+            data: data.participantIds,
+            skipDuplicates: true
+          }
+        }
+      },
+      select,
+    });
+  }
 }

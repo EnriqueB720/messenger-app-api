@@ -138,6 +138,7 @@ type Mutation {
   createUser(data: UserCreateInput!): User!
   createContact(data: ContactCreateInput!): Contact!
   createChat(data: ChatCreateInput!): Chat!
+  createGroupChat(data: ChatCreateInput!): Chat!
   createDirectMessage(data: DirectMessageCreateInput!): Message!
   createGrouptMessage(data: GroupMessageCreateInput!): Message!
 }
@@ -165,6 +166,11 @@ input UserCreateNestedOneWithoutContactsInput {
 input ChatCreateInput {
   name: String!
   isGroup: Boolean
+  participantIds: [ChatParticipantCreateManyChatInput!]
+}
+
+input ChatParticipantCreateManyChatInput {
+  userId: Int
 }
 
 input DirectMessageCreateInput {
