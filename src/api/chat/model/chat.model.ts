@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { ChatParticipant } from 'src/api/chat-participant/model';
 import { Message } from 'src/api/message/model';
 
 @ObjectType()
@@ -23,4 +24,7 @@ export class Chat {
 
   @Field(() => [Message], { nullable: true })
   messages?: Message[];
+  
+  @Field(() => [ChatParticipant], { nullable: true })
+  participants?: ChatParticipant[];
 }

@@ -26,3 +26,9 @@ export class UserCreateNestedOneWithoutMessagesInput {
   @Field(() => UserWhereUniqueInput)
   connect: UserWhereUniqueInput
 }
+
+@InputType()
+export class UserCreateNestedOneWithoutChatParticipantsInput {
+  @Field(() => UserWhereUniqueInput)
+  connect: UserWhereUniqueInput
+}

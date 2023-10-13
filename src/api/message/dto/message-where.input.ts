@@ -21,7 +21,7 @@ export class MessageWhereInput {
 
   @IsOptional()
   @Field(()=> String, { nullable: true })
-  test?: string;
+  text?: string;
 
   @IsOptional()
   @Field(()=> Date, { nullable: true })

@@ -43,6 +43,11 @@ enum Role {
   ADMIN
 }
 
+type ChatParticipant {
+  chatId: Float
+  userId: Float
+}
+
 type Chat {
   id: Float
   uuid: String
@@ -51,6 +56,7 @@ type Chat {
   updatedAt: DateTime
   isGroup: Boolean
   messages: [Message!]
+  participants: [ChatParticipant!]
 }
 
 type Query {
@@ -58,6 +64,7 @@ type Query {
   Contacts(skip: Int, take: Int, cursor: ContactWhereUniqueInput, orderBy: ContactOrderByInput, where: ContactWhereInput): [Contact!]!
   Chats(skip: Int, take: Int, cursor: ChatWhereUniqueInput, orderBy: ChatOrderByInput, where: ChatWhereInput): [Chat!]!
   messages(skip: Int, take: Int, cursor: MessageWhereUniqueInput, orderBy: MessageOrderByInput, where: MessageWhereInput): [Message!]!
+  ChatParticipant(where: ChatParticipantWhereUniqueInput!): [ChatParticipant!]!
 }
 
 input UserWhereUniqueInput {
@@ -128,10 +135,15 @@ input MessageWhereInput {
   uuid: String
   senderId: Int
   chatId: Int
-  test: String
+  text: String
   createdAt: DateTime
   updatedAt: DateTime
   replyMessageId: Int
+}
+
+input ChatParticipantWhereUniqueInput {
+  chatId: Int
+  userId: Int
 }
 
 type Mutation {
@@ -141,6 +153,7 @@ type Mutation {
   createGroupChat(data: ChatCreateInput!): Chat!
   createDirectMessage(data: DirectMessageCreateInput!): Message!
   createGrouptMessage(data: GroupMessageCreateInput!): Message!
+  createNewGroupParticipant(data: ChatParticipantCreateInput!): ChatParticipant!
 }
 
 input UserCreateInput {
@@ -191,4 +204,17 @@ input GroupMessageCreateInput {
 
 input ChatCreateNestedOneWithoutMessagesInput {
   connect: ChatWhereUniqueInput!
+}
+
+input ChatParticipantCreateInput {
+  chat: ChatCreateNestedOneWithoutParticipantsInput!
+  user: UserCreateNestedOneWithoutChatParticipantsInput!
+}
+
+input ChatCreateNestedOneWithoutParticipantsInput {
+  connect: ChatWhereUniqueInput!
+}
+
+input UserCreateNestedOneWithoutChatParticipantsInput {
+  connect: UserWhereUniqueInput!
 }
