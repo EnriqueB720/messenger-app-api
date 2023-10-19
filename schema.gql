@@ -62,7 +62,7 @@ type Chat {
 type Query {
   user(where: UserWhereUniqueInput!): User!
   Contacts(skip: Int, take: Int, cursor: ContactWhereUniqueInput, orderBy: ContactOrderByInput, where: ContactWhereInput): [Contact!]!
-  Chats(skip: Int, take: Int, cursor: ChatWhereUniqueInput, orderBy: ChatOrderByInput, where: ChatWhereInput): [Chat!]!
+  chats(skip: Int, take: Int, cursor: ChatWhereUniqueInput, orderBy: ChatOrderByInput, where: ChatWhereInput): [Chat!]!
   messages(skip: Int, take: Int, cursor: MessageWhereUniqueInput, orderBy: MessageOrderByInput, where: MessageWhereInput): [Message!]!
   ChatParticipant(where: ChatParticipantWhereUniqueInput!): [ChatParticipant!]!
 }
@@ -71,6 +71,7 @@ input UserWhereUniqueInput {
   id: Int
   uuid: String
   username: String
+  phoneNumber: Int
   email: String
 }
 

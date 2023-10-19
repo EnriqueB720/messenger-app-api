@@ -6,12 +6,15 @@ import { ContactArgs, ContactCreateInput, ContactsArgs, ContactUpdateInput } fro
 
 import { PrismaService } from '@prisma-datasource';
 import { BadRequestException } from '@nestjs/common/exceptions';
+import { UserService } from '../user/user.service';
+
 
 
 
 @Injectable()
 export class ContactService {
-  constructor(private readonly prismaService: PrismaService) { }
+  constructor(private readonly prismaService: PrismaService,
+              private readonly userService: UserService) { }
 
   public async findOne(
     { where }: ContactArgs,
@@ -47,14 +50,15 @@ export class ContactService {
     { select }: ContactSelect,
   ): Promise<Contact> {
 
-    const contactUser = await this.prismaService.user.findUnique({
+    const contactUser = await this.userService.findOne({
       where: {
         phoneNumber: data.phoneNumber
-      },
+      }
+    },{
       select: {
         id: true
       }
-    })
+    });
 
     if (!contactUser) {
       throw new BadRequestException("This phone number is not related to any user");
@@ -77,9 +81,9 @@ export class ContactService {
   public async update(
     { where }: ContactArgs,
     { select }: ContactSelect,
-      data: ContactUpdateInput
+    data: ContactUpdateInput
   ):
-   Promise<Contact>{
+    Promise<Contact> {
     return this.prismaService.contact.update({
       data: {
         fullName: `${data.firstName} ${data.lastName}`,
@@ -97,7 +101,7 @@ export class ContactService {
     { where }: ContactArgs,
     { select }: ContactSelect,
   ):
-   Promise<Contact>{
+    Promise<Contact> {
     return this.prismaService.contact.delete({
       select,
       where: {

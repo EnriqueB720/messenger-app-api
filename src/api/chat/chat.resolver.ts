@@ -14,7 +14,7 @@ export class ChatResolver {
   constructor(private readonly chatService: ChatService) {}
 
   @Query(() => [Chat])
-  public async Chats(
+  public async chats(
     @Args() args: ChatsArgs,
     @GraphQLFields() { fields }: IGraphQLFields<ChatSelect>,
   ): Promise<Chat[]> {

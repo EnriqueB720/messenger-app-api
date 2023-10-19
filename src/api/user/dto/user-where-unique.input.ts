@@ -11,8 +11,11 @@ export class UserWhereUniqueInput {
   @Field(() => String, { nullable: true })
   username?: string;
 
+  @Field(() => Int, { nullable: true })
+  phoneNumber: number;
+
   @Field(() => String, { nullable: true })
-  email: string;
+  email?: string;
 }
 
 @InputType()
