@@ -6,12 +6,14 @@ import { ChatParticipantArgs, ChatParticipantCreateInput } from './dto';
 
 import { PrismaService } from '@prisma-datasource';
 import { BadRequestException } from '@nestjs/common/exceptions';
+import { ChatService } from '../chat/chat.service';
 
 
 
 @Injectable()
 export class ChatParticipantService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService,
+              private readonly chatService: ChatService) {}
 
   public async findMany(
     { where }: ChatParticipantArgs,
@@ -28,16 +30,16 @@ export class ChatParticipantService {
     { select }: ChatParticipantSelect,
   ): Promise<ChatParticipant> {
 
-    let chat = await this.prismaService.chat.findUnique({
+    let chat = await this.chatService.findOne({//Validates if the chat is a group
+      id: data.chat.connect.id
+    },
+    {
       select:{
         isGroup: true
-      },
-      where:{
-        id: data.chat.connect.id
       }
     });
 
-    let participant = await this.prismaService.chatParticipant.findFirst({
+    let participant = await this.prismaService.chatParticipant.findFirst({//Validates if the user is already part of that chat
       select: {
         userId: true,
       },
