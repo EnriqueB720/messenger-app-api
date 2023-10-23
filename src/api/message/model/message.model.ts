@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { UserMessageStatus } from 'src/api/userMessageStatus/model';
 
 @ObjectType()
 export class Message {
@@ -26,4 +27,6 @@ export class Message {
   @Field(() => Number, { nullable: true })
   replyMessageId?: number;
 
+  @Field(() => UserMessageStatus, {nullable: true})
+  userMessageStatus?: UserMessageStatus;
 }

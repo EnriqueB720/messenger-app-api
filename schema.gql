@@ -10,6 +10,14 @@ type Contact {
   isBlocked: Boolean
 }
 
+type UserMessageStatus {
+  messageId: Float
+  userId: Float
+  isRead: Boolean
+  isReceived: Boolean
+  isFavorite: Boolean
+}
+
 type Message {
   id: Float
   uuid: String
@@ -19,6 +27,7 @@ type Message {
   createdAt: DateTime
   updatedAt: DateTime
   replyMessageId: Float
+  userMessageStatus: UserMessageStatus
 }
 
 """
