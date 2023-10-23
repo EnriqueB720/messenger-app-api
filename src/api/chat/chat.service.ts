@@ -2,21 +2,22 @@ import { Injectable } from '@nestjs/common';
 
 import { Chat, ChatSelect } from './model';
 
-import { ChatArgs, ChatCreateInput, ChatsArgs } from './dto';
+import { ChatCreateInput, ChatsArgs, ChatWhereInput } from './dto';
 
 import { PrismaService } from '@prisma-datasource';
+import { ContactWhereUniqueInput } from '../contact/dto';
 
 @Injectable()
 export class ChatService {
   constructor(private readonly prismaService: PrismaService) { }
 
   public async findOne(
-    { where }: ChatArgs,
+    where: ChatWhereInput,
     { select }: ChatSelect,
   ): Promise<Chat> {
-    return this.prismaService.chat.findUnique({
-      where,
+    return this.prismaService.chat.findFirst({
       select,
+      where
     });
   }
 
@@ -33,12 +34,21 @@ export class ChatService {
     });
   }
 
-  public async create(
+  public async createDirectChat(
     data: ChatCreateInput,
     { select }: ChatSelect,
+    participants: ContactWhereUniqueInput
   ): Promise<Chat> {
     return this.prismaService.chat.create({
-      data,
+      data: {
+        name: data.name,
+        isGroup: data.isGroup,
+        participants: {
+          create: [
+            { userId: participants.userId },
+            { userId: participants.contactUserId }]
+        }
+      },
       select,
     });
   }

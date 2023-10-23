@@ -22,14 +22,6 @@ export class ChatResolver {
   }
 
   @Mutation(() => Chat)
-  public async createChat(
-    @Args('data') data: ChatCreateInput,
-    @GraphQLFields() { fields }: IGraphQLFields<ChatSelect>,
-  ): Promise<Chat> {
-    return this.chatService.create(data, fields);
-  }
-
-  @Mutation(() => Chat)
   public async createGroupChat(
     @Args('data') data: ChatCreateInput,
     @GraphQLFields() { fields }: IGraphQLFields<ChatSelect>,

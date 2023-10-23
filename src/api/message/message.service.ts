@@ -5,12 +5,14 @@ import { Message, MessageSelect } from './model';
 import { DirectMessageCreateInput, GroupMessageCreateInput, MessageArgs, MessagesArgs } from './dto';
 
 import { PrismaService } from '@prisma-datasource';
+import { ChatService } from '../chat/chat.service';
 
 
 
 @Injectable()
 export class MessageService {
-  constructor(private readonly prismaService: PrismaService) { }
+  constructor(private readonly prismaService: PrismaService,
+              private readonly chatService: ChatService) { }
 
   public async findOne(
     { where }: MessageArgs,
@@ -42,32 +44,28 @@ export class MessageService {
     { select }: MessageSelect,
   ): Promise<Message> {
 
-    let chat = await this.prismaService.chat.findFirst({
-      select: {
-        id: true
-      },
-      where: {
+    let chat = await this.chatService.findOne({ //Finds the chat to see if it already exists
         AND: [
           { isGroup: false },
           { participants: { some: { userId: contact.userId } } },
           { participants: { some: { userId: contact.contactUserId } } },
         ]
+    },{
+      select: {
+        id: true
       }
     });
 
     if (!chat) {
-      chat = await this.prismaService.chat.create({
-        data: {
-          participants: { //Auto uses the chat id of the chat we are creating
-            create: [{ userId: contact.userId },
-            { userId: contact.contactUserId }]
-          },
-          name: `${contact.userId}/${contact.contactUserId}-single-chat`
-        },
+      chat = await this.chatService.createDirectChat({
+        isGroup: false,
+        name: `${contact.userId}/${contact.contactUserId}-single-chat`
+      },{
         select: {
           id: true
         }
-      })
+      },
+      contact);
     }
 
     return this.prismaService.message.create({
@@ -88,20 +86,17 @@ export class MessageService {
     { select }: MessageSelect,
   ): Promise<Message> {
 
-    let chat = await this.prismaService.chat.findFirst({
-      select: {
+    let chat = await this.chatService.findOne({
+      isGroup: true,
+      userId: data.sender.connect.id,
+      id: data.chat.connect.id
+    },
+    {
+      select:{
         id: true
-      },
-      where: {
-        isGroup: true,
-        id: data.chat.connect.id,
-        participants: {
-          some: {
-            userId: data.sender.connect.id
-          }
-        }
       }
     });
+
 
     if(!chat){
       throw new BadRequestException("You are not part of this chat");

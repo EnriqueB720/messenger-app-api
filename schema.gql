@@ -117,6 +117,21 @@ input ChatWhereInput {
   createdAt: DateTime
   updatedAt: DateTime
   isGroup: Boolean
+  userId: Int
+  contactUserId: Int
+  AND: [ChatWhereInput!]
+  participants: ChatParticipantListRelationFilter
+}
+
+input ChatParticipantListRelationFilter {
+  some: ChatParticipantWhereInput
+  every: ChatParticipantWhereInput
+  none: ChatParticipantWhereInput
+}
+
+input ChatParticipantWhereInput {
+  userId: Int
+  contactUserId: Int
 }
 
 input MessageWhereUniqueInput {
@@ -150,7 +165,6 @@ input ChatParticipantWhereUniqueInput {
 type Mutation {
   createUser(data: UserCreateInput!): User!
   createContact(data: ContactCreateInput!): Contact!
-  createChat(data: ChatCreateInput!): Chat!
   createGroupChat(data: ChatCreateInput!): Chat!
   createDirectMessage(data: DirectMessageCreateInput!): Message!
   createGrouptMessage(data: GroupMessageCreateInput!): Message!
