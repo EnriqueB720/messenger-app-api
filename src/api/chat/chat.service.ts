@@ -22,14 +22,33 @@ export class ChatService {
   }
 
   public async findMany(
-    args: ChatsArgs,
+    {
+      where: {
+        userId,
+        ...where
+      },
+      ...args
+    }: ChatsArgs,
     { select }: ChatSelect,
   ): Promise<Chat[]> {
     return this.prismaService.chat.findMany({
       ...args,
-      select,
-      where: {
-        ...args.where
+      select: {
+        ...select,
+        messages: {
+          take: 1,
+          orderBy: {
+            createdAt: 'desc'
+          }
+        }
+      },
+      where:{
+        ...where,
+        participants:{
+          some: {
+            userId
+          }
+        }
       }
     });
   }

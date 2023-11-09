@@ -127,7 +127,6 @@ input ChatWhereInput {
   updatedAt: DateTime
   isGroup: Boolean
   userId: Int
-  contactUserId: Int
   AND: [ChatWhereInput!]
   participants: ChatParticipantListRelationFilter
 }

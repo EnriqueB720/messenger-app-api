@@ -58,10 +58,6 @@ export class ChatWhereInput {
   userId?: number;
 
   @IsOptional()
-  @Field(() => Int, { nullable: true })
-  contactUserId?: number;
-
-  @IsOptional()
   @Field(() => [ChatWhereInput], { nullable: true })
   AND?: ChatWhereInput[];
 
