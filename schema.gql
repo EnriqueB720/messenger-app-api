@@ -55,6 +55,7 @@ enum Role {
 type ChatParticipant {
   chatId: Float
   userId: Float
+  user: User
 }
 
 type Chat {
