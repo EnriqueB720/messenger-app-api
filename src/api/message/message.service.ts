@@ -88,7 +88,11 @@ export class MessageService {
 
     let chat = await this.chatService.findOne({
       isGroup: true,
-      userId: data.sender.connect.id,
+      participants:{
+        some:{
+          userId: data.sender.connect.id
+        }
+      },
       id: data.chat.connect.id
     },
     {
