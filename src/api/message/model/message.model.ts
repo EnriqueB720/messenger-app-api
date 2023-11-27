@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { User } from 'src/api/user/model/user.model';
 import { UserMessageStatus } from 'src/api/userMessageStatus/model';
 
 @ObjectType()
@@ -29,4 +30,7 @@ export class Message {
 
   @Field(() => UserMessageStatus, {nullable: true})
   userMessageStatus?: UserMessageStatus;
+
+  @Field(() => User, { nullable: true })
+  sender?: User;
 }

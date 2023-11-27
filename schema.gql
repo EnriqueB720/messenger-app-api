@@ -28,6 +28,7 @@ type Message {
   updatedAt: DateTime
   replyMessageId: Float
   userMessageStatus: UserMessageStatus
+  sender: User
 }
 
 """
