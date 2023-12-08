@@ -31,7 +31,7 @@ export class MessageResolver {
   }
 
   @Mutation(() => Message)
-  public async createGrouptMessage(
+  public async createGroupMessage(
     @Args('data') data: GroupMessageCreateInput,
     @GraphQLFields() { fields }: IGraphQLFields<MessageSelect>,
   ): Promise<Message> {

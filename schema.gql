@@ -177,7 +177,7 @@ type Mutation {
   createContact(data: ContactCreateInput!): Contact!
   createGroupChat(data: ChatCreateInput!): Chat!
   createDirectMessage(data: DirectMessageCreateInput!): Message!
-  createGrouptMessage(data: GroupMessageCreateInput!): Message!
+  createGroupMessage(data: GroupMessageCreateInput!): Message!
   createNewGroupParticipant(data: ChatParticipantCreateInput!): ChatParticipant!
 }
 
