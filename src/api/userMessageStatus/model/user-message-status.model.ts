@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { User } from 'src/api/user/model';
 
 @ObjectType()
 export class UserMessageStatus {
@@ -16,4 +17,7 @@ export class UserMessageStatus {
 
   @Field(() => Boolean, { nullable: true })
   isFavorite?: boolean;
+
+  @Field(() => User, { nullable: true })
+  user?: User;
 }

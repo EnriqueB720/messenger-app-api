@@ -16,6 +16,7 @@ type UserMessageStatus {
   isRead: Boolean
   isReceived: Boolean
   isFavorite: Boolean
+  user: User
 }
 
 type Message {
