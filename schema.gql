@@ -27,7 +27,7 @@ type Message {
   createdAt: DateTime
   updatedAt: DateTime
   replyMessageId: Float
-  userMessageStatus: UserMessageStatus
+  userMessageStatuses: [UserMessageStatus!]
   sender: User
 }
 
@@ -76,6 +76,7 @@ type Query {
   chats(skip: Int, take: Int, cursor: ChatWhereUniqueInput, orderBy: ChatOrderByInput, where: ChatWhereInput): [Chat!]!
   messages(skip: Int, take: Int, cursor: MessageWhereUniqueInput, orderBy: MessageOrderByInput, where: MessageWhereInput): [Message!]!
   ChatParticipant(where: ChatParticipantWhereUniqueInput!): [ChatParticipant!]!
+  userMessageStatus(skip: Int, take: Int, cursor: UserMessageStatusWhereUniqueInput, orderBy: UserMessageStatusOrderByInput, where: UserMessageStatusWhereInput): [UserMessageStatus!]!
 }
 
 input UserWhereUniqueInput {
@@ -170,6 +171,23 @@ input MessageWhereInput {
 input ChatParticipantWhereUniqueInput {
   chatId: Int
   userId: Int
+}
+
+input UserMessageStatusWhereUniqueInput {
+  messageId: Int
+  userId: String
+}
+
+input UserMessageStatusOrderByInput {
+  isRead: OrderByArg
+}
+
+input UserMessageStatusWhereInput {
+  messageId: Int
+  userId: Int
+  isRead: Boolean
+  isFavorite: Boolean
+  isReceived: Boolean
 }
 
 type Mutation {

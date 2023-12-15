@@ -1,3 +1,5 @@
+import { ChatParticipantSelect } from "src/api/chat-participant/model";
+
 interface ChatPrismaSelect {
     id?: boolean;
     uuid?: boolean;
@@ -5,6 +7,7 @@ interface ChatPrismaSelect {
     createdAt?: boolean;
     updatedAt?: boolean;
     isGroup?: boolean;
+    participants?: ChatParticipantSelect;
   }
   
   export interface ChatSelect {

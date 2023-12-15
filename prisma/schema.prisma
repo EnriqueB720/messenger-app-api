@@ -65,26 +65,26 @@ model ChatParticipant {
 }
 
 model Message {
-  id                Int                @id @default(autoincrement())
-  uuid              String             @default(uuid())
-  chatId            Int                @map("chat_id")
-  senderId          Int                @map("sender_id")
-  text              String             @map("message_text")
-  createdAt         DateTime           @default(now()) @map("created_at")
-  updatedAt         DateTime           @updatedAt @map("updated_at")
-  replyMessageId    Int?               @map("reply_message_id")
-  attachment        Attachment?
-  userMessageStatus UserMessageStatus?
-  chat              Chat               @relation(fields: [chatId], references: [id])
-  sender            User               @relation(fields: [senderId], references: [id])
-  replyMessage      Message?           @relation("replyMessage", fields: [replyMessageId], references: [id])
-  replyMessages     Message[]          @relation("replyMessage")
+  id                  Int                 @id @default(autoincrement())
+  uuid                String              @default(uuid())
+  chatId              Int                 @map("chat_id")
+  senderId            Int                 @map("sender_id")
+  text                String              @map("message_text")
+  createdAt           DateTime            @default(now()) @map("created_at")
+  updatedAt           DateTime            @updatedAt @map("updated_at")
+  replyMessageId      Int?                @map("reply_message_id")
+  attachment          Attachment?
+  userMessageStatuses UserMessageStatus[]
+  chat                Chat                @relation(fields: [chatId], references: [id])
+  sender              User                @relation(fields: [senderId], references: [id])
+  replyMessage        Message?            @relation("replyMessage", fields: [replyMessageId], references: [id])
+  replyMessages       Message[]           @relation("replyMessage")
 
   @@map("messages")
 }
 
 model UserMessageStatus {
-  messageId  Int     @unique @map("message_id")
+  messageId  Int     @map("message_id")
   userId     Int     @map("user_id")
   isRead     Boolean @default(false) @map("is_read")
   isReceived Boolean @default(false) @map("is_received")

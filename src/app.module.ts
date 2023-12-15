@@ -9,6 +9,7 @@ import { ChatParticipantModule } from './api/chat-participant/chat-participant.m
 //Shared
 import { ConfigModule } from 'src/shared/config/config.module';
 import { PrismaModule } from './shared/datasource/prisma/prisma.module';
+import { UserMessageStatusModule } from './api/userMessageStatus/user-message-status.module';
 
 
 
@@ -20,7 +21,8 @@ import { PrismaModule } from './shared/datasource/prisma/prisma.module';
     ContactModule,
     ChatModule,
     MessageModule,
-    ChatParticipantModule],
+    ChatParticipantModule,
+    UserMessageStatusModule],
   controllers: [],
   providers: [],
 })

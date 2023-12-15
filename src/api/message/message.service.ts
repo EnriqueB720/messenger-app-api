@@ -75,6 +75,11 @@ export class MessageService {
           connect: {
             id: chat.id
           }
+        },
+        userMessageStatuses:{
+          create: {
+            userId: contact.contactUserId
+          }
         }
       },
       select,
@@ -86,18 +91,23 @@ export class MessageService {
     { select }: MessageSelect,
   ): Promise<Message> {
 
-    let chat = await this.chatService.findOne({
+    const chat = await this.chatService.findOne({
       isGroup: true,
       participants:{
         some:{
-          userId: data.sender.connect.id
+          userId: data.sender.connect.id //TODO Removal needed when Auth ready 
         }
       },
       id: data.chat.connect.id
     },
     {
       select:{
-        id: true
+        id: true,
+        participants: {
+          select: {
+            userId: true
+          }
+        }
       }
     });
 
@@ -106,11 +116,22 @@ export class MessageService {
       throw new BadRequestException("You are not part of this chat");
     }
 
+    const participantWithoutSender = chat.participants.filter(p => p.userId !== data.sender.connect.id);
+
     return this.prismaService.message.create({
       data: {
         ...data,
         chat: data.chat,
-        sender: data.sender
+        sender: data.sender,
+        userMessageStatuses:{
+          create: participantWithoutSender.map(p => ({
+            user: {
+              connect: {
+                id: p.userId
+              }
+            }
+          })) //TODO Removal needed when Auth ready 
+        }
       },
       select,
     });

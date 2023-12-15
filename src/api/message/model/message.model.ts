@@ -28,8 +28,8 @@ export class Message {
   @Field(() => Number, { nullable: true })
   replyMessageId?: number;
 
-  @Field(() => UserMessageStatus, {nullable: true})
-  userMessageStatus?: UserMessageStatus;
+  @Field(() => [UserMessageStatus], {nullable: true})
+  userMessageStatuses?: UserMessageStatus[];
 
   @Field(() => User, { nullable: true })
   sender?: User;
