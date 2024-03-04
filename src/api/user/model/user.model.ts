@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { Role } from '@prisma/client';
+import { Role, Language } from '@prisma/client';
 import { Contact } from 'src/api/contact/model';
 import { Message } from 'src/api/message/model';
 
@@ -20,6 +20,9 @@ export class User {
   @Field(() => Role, { nullable: true })
   type?: Role;
 
+  @Field(() => Language, { nullable: true })
+  language?: Language;
+
   @Field(() => String, { nullable: true })
   fullName?: string;
 
@@ -36,3 +39,7 @@ export class User {
 registerEnumType(Role, {
   name: 'Role',
 });
+
+registerEnumType(Language,{
+  name: 'Language'
+})

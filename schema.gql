@@ -43,6 +43,7 @@ type User {
   email: String
   phoneNumber: Int
   type: Role
+  language: Language
   fullName: String
   username: String
   contacts: [Contact!]
@@ -52,6 +53,11 @@ type User {
 enum Role {
   USER
   ADMIN
+}
+
+enum Language {
+  SPANISH
+  ENGLISH
 }
 
 type ChatParticipant {

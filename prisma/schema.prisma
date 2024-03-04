@@ -19,6 +19,7 @@ model User {
   passwordHash        String              @map("password_hash")
   fullName            String              @map("full_name") @db.VarChar(100)
   type                Role                @default(USER)
+  language            Language            @default(SPANISH)
   messages            Message[]
   chatParticipants    ChatParticipant[]
   userMessageStatuses UserMessageStatus[]
@@ -112,4 +113,9 @@ model Attachment {
 enum Role {
   USER
   ADMIN
+}
+
+enum Language {
+  SPANISH
+  ENGLISH
 }
