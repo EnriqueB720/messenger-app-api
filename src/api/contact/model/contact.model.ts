@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { User } from 'src/api/user/model/user.model';
 
 @ObjectType()
 export class Contact {
@@ -16,4 +17,7 @@ export class Contact {
 
   @Field(() => Boolean, { nullable: true })
   isBlocked?: Boolean;
+
+  @Field(() => User, { nullable: true })
+  contactUser?: User;
 }

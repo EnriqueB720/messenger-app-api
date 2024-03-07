@@ -8,6 +8,7 @@ type Contact {
   fullName: String
   isFavorite: Boolean
   isBlocked: Boolean
+  contactUser: User
 }
 
 type UserMessageStatus {
