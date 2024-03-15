@@ -15,7 +15,7 @@ export class ContactResolver {
   constructor(private readonly contactService: ContactService) { }
 
   @Query(() => [Contact])
-  public async Contacts(
+  public async contacts(
     @Args() args: ContactsArgs,
     @GraphQLFields() { fields }: IGraphQLFields<ContactSelect>,
   ): Promise<Contact[]> {

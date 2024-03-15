@@ -45,12 +45,12 @@ export class MessageService {
   ): Promise<Message> {
 
     let chat = await this.chatService.findOne({ //Finds the chat to see if it already exists
-        AND: [
+         AND: [
           { isGroup: false },
           { participants: { some: { userId: contact.userId } } },
           { participants: { some: { userId: contact.contactUserId } } },
         ]
-    },{
+  },{
       select: {
         id: true
       }

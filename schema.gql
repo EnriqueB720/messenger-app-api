@@ -80,7 +80,8 @@ type Chat {
 
 type Query {
   user(where: UserWhereUniqueInput!): User!
-  Contacts(skip: Int, take: Int, cursor: ContactWhereUniqueInput, orderBy: ContactOrderByInput, where: ContactWhereInput): [Contact!]!
+  contacts(skip: Int, take: Int, cursor: ContactWhereUniqueInput, orderBy: ContactOrderByInput, where: ContactWhereInput): [Contact!]!
+  chat(where: ChatWhereUniqueInput!): Chat!
   chats(skip: Int, take: Int, cursor: ChatWhereUniqueInput, orderBy: ChatOrderByInput, where: ChatWhereInput): [Chat!]!
   messages(skip: Int, take: Int, cursor: MessageWhereUniqueInput, orderBy: MessageOrderByInput, where: MessageWhereInput): [Message!]!
   ChatParticipant(where: ChatParticipantWhereUniqueInput!): [ChatParticipant!]!

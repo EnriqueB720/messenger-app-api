@@ -30,8 +30,10 @@ export class ChatParticipantService {
     { select }: ChatParticipantSelect,
   ): Promise<ChatParticipant> {
 
-    let chat = await this.chatService.findOne({//Validates if the chat is a group
-      id: data.chat.connect.id
+    let chat = await this.chatService.findUnique({//Validates if the chat is a group
+      where:{
+        id: data.chat.connect.id
+      }
     },
     {
       select:{
