@@ -58,6 +58,13 @@ export class ChatService {
           some: {
             userId
           }
+        },
+        AND:{
+          messages:{
+            some: {
+              text: {not: ''}
+            }
+          }
         }
       }
     });

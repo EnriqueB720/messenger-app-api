@@ -7,6 +7,7 @@ import { ContactArgs, ContactCreateInput, ContactsArgs, ContactUpdateInput } fro
 import { PrismaService } from '@prisma-datasource';
 import { BadRequestException } from '@nestjs/common/exceptions';
 import { UserService } from '../user/user.service';
+import { ChatService } from '../chat/chat.service';
 
 
 
@@ -14,7 +15,8 @@ import { UserService } from '../user/user.service';
 @Injectable()
 export class ContactService {
   constructor(private readonly prismaService: PrismaService,
-              private readonly userService: UserService) { }
+    private readonly userService: UserService,
+    private readonly chatService: ChatService) { }
 
   public async findOne(
     { where }: ContactArgs,
@@ -54,7 +56,7 @@ export class ContactService {
       where: {
         phoneNumber: data.phoneNumber
       }
-    },{
+    }, {
       select: {
         id: true
       }
@@ -62,6 +64,37 @@ export class ContactService {
 
     if (!contactUser) {
       throw new BadRequestException("This phone number is not related to any user");
+    }
+
+    const doesChatAlreadyExists = await this.chatService.findOne({
+      AND: [
+        { isGroup: false },
+        { participants: { some: { userId: data.user.connect.id } } },
+        { participants: { some: { userId: contactUser.id } } },
+      ]
+    }, {
+      select: {
+        id: true
+      }
+    });
+
+    if (!doesChatAlreadyExists) {
+      const newChat = await this.chatService.createDirectChat({
+        isGroup: false,
+        name: `${data.user.connect.id}/${contactUser.id}-single-chat`
+      }, {
+        select: {
+          id: true
+        }
+      },
+        {
+          contactUserId: contactUser.id,
+          userId: data.user.connect.id
+        });
+
+      if (!newChat) {
+        throw new BadRequestException("Contact couldn't get created");
+      }
     }
 
     return this.prismaService.contact.create({
@@ -76,6 +109,7 @@ export class ContactService {
       },
       select,
     });
+
   }
 
   public async update(
