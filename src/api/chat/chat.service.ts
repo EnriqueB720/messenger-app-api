@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 
 import { Chat, ChatSelect } from './model';
 
@@ -22,7 +22,7 @@ export class ChatService {
   }
 
   public async findOne(
-     where : ChatWhereInput,
+    where: ChatWhereInput,
     { select }: ChatSelect,
   ): Promise<Chat> {
     return this.prismaService.chat.findFirst({
@@ -52,20 +52,89 @@ export class ChatService {
           }
         }
       },
-      where:{
+      where: {
         ...where,
-        participants:{
+        participants: {
           some: {
             userId
           }
         },
-        AND:{
-          messages:{
+        AND: {
+          messages: {
             some: {
-              text: {not: ''}
+              text: { not: '' }
             }
           }
         }
+      }
+    });
+  }
+
+  public async filteredChats(
+    {
+      where: {
+        userId,
+        name,
+        ...where
+      },
+      ...args
+    }: ChatsArgs,
+    { select }: ChatSelect,
+  ): Promise<Chat[]> {
+
+    const chatsId = await this.prismaService.contact.findMany({
+      where: {
+        fullName: { contains: name },
+        user: {
+          id: userId
+        }
+      },
+      select: {
+        contactUser: {
+          select: {
+            chatParticipants: {
+              select: {
+                chat:{
+                  select: {
+                    id: true,
+                    isGroup: true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    })
+
+    const chatIdsOfNonGroupChats = chatsId.map(c => {
+      const nonGroupChatParticipant = c.contactUser.chatParticipants.find(cp => {
+          return cp.chat.isGroup === false;
+      });
+      if (nonGroupChatParticipant) {
+          return nonGroupChatParticipant.chat.id;
+      }
+      return null; 
+  }).filter(id => id !== null);
+
+
+    return this.prismaService.chat.findMany({
+      ...args,
+      select: {
+        ...select,
+        messages: {
+          take: 1,
+          orderBy: {
+            createdAt: 'desc'
+          }
+        }
+      },
+      where: {
+        ...where,
+        OR: [
+          { AND: [{ name: { contains: name } }, { participants: { some: { userId: userId } } }] },
+          { AND: [{ isGroup: false }, { id: { in: chatIdsOfNonGroupChats } }] }
+        ]
       }
     });
   }

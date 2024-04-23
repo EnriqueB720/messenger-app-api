@@ -83,6 +83,7 @@ type Query {
   contacts(skip: Int, take: Int, cursor: ContactWhereUniqueInput, orderBy: ContactOrderByInput, where: ContactWhereInput): [Contact!]!
   chat(where: ChatWhereUniqueInput!): Chat!
   chats(skip: Int, take: Int, cursor: ChatWhereUniqueInput, orderBy: ChatOrderByInput, where: ChatWhereInput): [Chat!]!
+  filteredChats(skip: Int, take: Int, cursor: ChatWhereUniqueInput, orderBy: ChatOrderByInput, where: ChatWhereInput): [Chat!]!
   messages(skip: Int, take: Int, cursor: MessageWhereUniqueInput, orderBy: MessageOrderByInput, where: MessageWhereInput): [Message!]!
   ChatParticipant(where: ChatParticipantWhereUniqueInput!): [ChatParticipant!]!
   userMessageStatus(skip: Int, take: Int, cursor: UserMessageStatusWhereUniqueInput, orderBy: UserMessageStatusOrderByInput, where: UserMessageStatusWhereInput): [UserMessageStatus!]!
