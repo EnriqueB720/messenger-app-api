@@ -1,4 +1,5 @@
-import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation, Subscription } from '@nestjs/graphql';
+import { PubSub } from 'graphql-subscriptions';
 
 import { Message, MessageSelect } from './model';
 
@@ -9,6 +10,8 @@ import { MessageService } from './message.service';
 import { GraphQLFields, IGraphQLFields } from '@decorators';
 import { MessagesArgs } from './dto/messages.args';
 
+
+const pubSub = new PubSub();
 
 @Resolver(() => Message)
 export class MessageResolver {
@@ -27,7 +30,9 @@ export class MessageResolver {
     @Args('data') data: DirectMessageCreateInput,
     @GraphQLFields() { fields }: IGraphQLFields<MessageSelect>,
   ): Promise<Message> {
-    return this.messageService.createDirectMessage(data, fields);
+    const response = await this.messageService.createDirectMessage(data, fields);
+    pubSub.publish('messageSent', { messageSent: response });
+    return response;
   }
 
   @Mutation(() => Message)
@@ -38,4 +43,8 @@ export class MessageResolver {
     return this.messageService.createGroupMessage(data, fields);
   }
 
+  @Subscription(() => Message)
+  messageSent() {
+     return pubSub.asyncIterator('messageSent');
+  }
 }

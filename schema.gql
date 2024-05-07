@@ -271,3 +271,7 @@ input ChatCreateNestedOneWithoutParticipantsInput {
 input UserCreateNestedOneWithoutChatParticipantsInput {
   connect: UserWhereUniqueInput!
 }
+
+type Subscription {
+  messageSent: Message!
+}
