@@ -40,7 +40,9 @@ export class MessageResolver {
     @Args('data') data: GroupMessageCreateInput,
     @GraphQLFields() { fields }: IGraphQLFields<MessageSelect>,
   ): Promise<Message> {
-    return this.messageService.createGroupMessage(data, fields);
+    const response = this.messageService.createGroupMessage(data, fields);
+    pubSub.publish('messageSent', { messageSent: response });
+    return response;
   }
 
   @Subscription(() => Message)
