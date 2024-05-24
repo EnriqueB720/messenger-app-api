@@ -23,6 +23,9 @@
       ],
       "@decorators":[
         "src/shared/decorators/index"
+      ],
+      "@apis":[
+        "src/api/index"
       ]
     }
   }
