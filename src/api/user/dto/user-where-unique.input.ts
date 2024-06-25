@@ -12,10 +12,10 @@ export class UserWhereUniqueInput {
   username?: string;
 
   @Field(() => Int, { nullable: true })
-  phoneNumber: number;
+  phoneNumber?: number;
 
   @Field(() => String, { nullable: true })
-  email?: string;
+  email: string;
 }
 
 @InputType()
