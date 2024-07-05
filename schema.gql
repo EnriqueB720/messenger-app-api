@@ -79,7 +79,7 @@ type Chat {
 }
 
 type Query {
-  user(where: UserWhereUniqueInput!): User!
+  user(where: UserWhereInput!): User!
   contacts(skip: Int, take: Int, cursor: ContactWhereUniqueInput, orderBy: ContactOrderByInput, where: ContactWhereInput): [Contact!]!
   chat(where: ChatWhereUniqueInput!): Chat!
   chats(skip: Int, take: Int, cursor: ChatWhereUniqueInput, orderBy: ChatOrderByInput, where: ChatWhereInput): [Chat!]!
@@ -89,7 +89,7 @@ type Query {
   userMessageStatus(skip: Int, take: Int, cursor: UserMessageStatusWhereUniqueInput, orderBy: UserMessageStatusOrderByInput, where: UserMessageStatusWhereInput): [UserMessageStatus!]!
 }
 
-input UserWhereUniqueInput {
+input UserWhereInput {
   id: Int
   uuid: String
   username: String
@@ -227,6 +227,14 @@ input ContactCreateInput {
 
 input UserCreateNestedOneWithoutContactsInput {
   connect: UserWhereUniqueInput!
+}
+
+input UserWhereUniqueInput {
+  id: Int
+  uuid: String
+  username: String
+  phoneNumber: Int
+  email: String
 }
 
 input ChatCreateInput {

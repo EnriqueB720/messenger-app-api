@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { User, UserSelect } from './model';
 
-import { UserArgs, UserCreateInput } from './dto';
+import { UserArgs, UserCreateInput, UserWhereInput } from './dto';
 
 import { PrismaService } from '@prisma-datasource';
 
@@ -16,15 +16,17 @@ export class UserService {
     { where }: UserArgs,
     { select }: UserSelect,
   ): Promise<User> {
-    return this.prismaService.user.findUnique({
+    return this.prismaService.user.findFirst({
       where,
       select,
     });
   }
 
-  public async findUserPassword({ where }: UserArgs) {
+  public async findUserPassword({ where:{ email } }: UserArgs) {
     const user = await this.prismaService.user.findUnique({
-      where,
+      where:{
+        email
+      },
     });
     return user ? user.passwordHash : null;
   }
