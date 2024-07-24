@@ -29,13 +29,13 @@ export class ChatResolver {
     return this.chatService.findMany(args, fields);
   }
 
-  @Query(() => [Chat])
-  public async filteredChats(
-    @Args() args: ChatsArgs,
-    @GraphQLFields() { fields }: IGraphQLFields<ChatSelect>,
-  ): Promise<Chat[]> {
-    return this.chatService.filteredChats(args, fields);
-  }
+  // @Query(() => [Chat])
+  // public async filteredChats(
+  //   @Args() args: ChatsArgs,
+  //   @GraphQLFields() { fields }: IGraphQLFields<ChatSelect>,
+  // ): Promise<Chat[]> {
+  //   return this.chatService.filteredChats(args, fields);
+  // }
 
   @Mutation(() => Chat)
   public async createGroupChat(
