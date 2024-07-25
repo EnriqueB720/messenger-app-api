@@ -78,6 +78,12 @@ type Chat {
   participants: [ChatParticipant!]
 }
 
+type LoginOutput {
+  access_token: String!
+  expiresAt: DateTime!
+  user: User!
+}
+
 type Query {
   user(where: UserWhereInput!): User!
   contacts(skip: Int, take: Int, cursor: ContactWhereUniqueInput, orderBy: ContactOrderByInput, where: ContactWhereInput): [Contact!]!
@@ -206,6 +212,8 @@ type Mutation {
   createDirectMessage(data: DirectMessageCreateInput!): Message!
   createGroupMessage(data: GroupMessageCreateInput!): Message!
   createNewGroupParticipant(data: ChatParticipantCreateInput!): ChatParticipant!
+  login(data: LoginUserInput!): LoginOutput!
+  signup(data: SignUpInput!): User!
 }
 
 input UserCreateInput {
@@ -277,6 +285,19 @@ input ChatCreateNestedOneWithoutParticipantsInput {
 
 input UserCreateNestedOneWithoutChatParticipantsInput {
   connect: UserWhereUniqueInput!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
+input SignUpInput {
+  email: String!
+  phoneNumber: Int!
+  username: String!
+  passwordHash: String!
+  fullName: String!
 }
 
 type Subscription {

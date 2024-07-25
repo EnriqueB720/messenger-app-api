@@ -20,8 +20,8 @@ export class AuthResolver {
 
   @Mutation(() => LoginOutput)
   @UseGuards(GqlAuthGuard)
-  login(@Args('data') data: LoginUserInput, @Context() context) {
-    return this.authService.login(context.user);
+  login(@Args('data') data: LoginUserInput) {
+    return this.authService.login(data);
   }
 
   @Mutation(() => User)
