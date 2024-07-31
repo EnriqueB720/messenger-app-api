@@ -6,7 +6,7 @@ import { Injectable } from '@nestjs/common';
 
 import { JwtService } from '@nestjs/jwt';
 
-import { LoginUserInput, SignUpInput } from './dto';
+import { LoginOutput, LoginUserInput, SignUpInput } from './dto';
 
 import { UserSelect } from 'src/api/user/model';
 
@@ -69,7 +69,7 @@ export class AuthService {
       }),
       expiresAt: new Date(Date.now() + 60 * 5),
       user,
-    };
+    } as LoginOutput;
   }
 
   async signup(signUpInput: SignUpInput, select: UserSelect) {

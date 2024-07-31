@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { SignUpInput } from './dto';
 
@@ -18,7 +18,7 @@ import { User, UserSelect } from 'src/api/user/model';
 export class AuthResolver {
   constructor(private authService: AuthService) {}
 
-  @Mutation(() => LoginOutput)
+  @Query(() => LoginOutput)
   @UseGuards(GqlAuthGuard)
   login(@Args('data') data: LoginUserInput) {
     return this.authService.login(data);
