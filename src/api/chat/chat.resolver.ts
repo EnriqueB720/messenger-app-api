@@ -7,6 +7,8 @@ import { ChatArgs, ChatCreateInput, ChatsArgs } from './dto';
 import { ChatService } from './chat.service';
 
 import { GraphQLFields, IGraphQLFields } from '@decorators';
+import { JwtAuthGuard } from 'src/shared/auth/guards';
+import { UseGuards } from '@nestjs/common';
 
 
 @Resolver(() => Chat)
@@ -22,6 +24,7 @@ export class ChatResolver {
   }
 
   @Query(() => [Chat])
+  @UseGuards(JwtAuthGuard)
   public async chats(
     @Args() args: ChatsArgs,
     @GraphQLFields() { fields }: IGraphQLFields<ChatSelect>,

@@ -92,6 +92,7 @@ type Query {
   messages(skip: Int, take: Int, cursor: MessageWhereUniqueInput, orderBy: MessageOrderByInput, where: MessageWhereInput): [Message!]!
   ChatParticipant(where: ChatParticipantWhereUniqueInput!): [ChatParticipant!]!
   userMessageStatus(skip: Int, take: Int, cursor: UserMessageStatusWhereUniqueInput, orderBy: UserMessageStatusOrderByInput, where: UserMessageStatusWhereInput): [UserMessageStatus!]!
+  login(data: LoginUserInput!): LoginOutput!
 }
 
 input UserWhereInput {
@@ -205,6 +206,11 @@ input UserMessageStatusWhereInput {
   isReceived: Boolean
 }
 
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
 type Mutation {
   createUser(data: UserCreateInput!): User!
   createContact(data: ContactCreateInput!): Contact!
@@ -212,7 +218,6 @@ type Mutation {
   createDirectMessage(data: DirectMessageCreateInput!): Message!
   createGroupMessage(data: GroupMessageCreateInput!): Message!
   createNewGroupParticipant(data: ChatParticipantCreateInput!): ChatParticipant!
-  login(data: LoginUserInput!): LoginOutput!
   signup(data: SignUpInput!): User!
 }
 
@@ -285,11 +290,6 @@ input ChatCreateNestedOneWithoutParticipantsInput {
 
 input UserCreateNestedOneWithoutChatParticipantsInput {
   connect: UserWhereUniqueInput!
-}
-
-input LoginUserInput {
-  email: String!
-  password: String!
 }
 
 input SignUpInput {

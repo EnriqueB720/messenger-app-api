@@ -38,6 +38,12 @@ export class AuthService {
             username: true,
             fullName: true,
             phoneNumber: true,
+            contacts: {
+              select: {
+                fullName: true,
+                contactUserId: true
+              }
+            }
             // updatedAt: true,
             // createdAt: true,
           },
@@ -59,6 +65,7 @@ export class AuthService {
   async login({email, password}: LoginUserInput) {
 
     const user = await this.validateUser(email, password);
+    
     if(!user) return null;
     return {
       access_token: this.jwtService.sign({
