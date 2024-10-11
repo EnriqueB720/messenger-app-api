@@ -38,14 +38,13 @@ export class AuthService {
             username: true,
             fullName: true,
             phoneNumber: true,
+            language: true,
             contacts: {
               select: {
                 fullName: true,
                 contactUserId: true
               }
             }
-            // updatedAt: true,
-            // createdAt: true,
           },
         },
       );

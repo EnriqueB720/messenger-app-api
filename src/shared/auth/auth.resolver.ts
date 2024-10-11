@@ -19,7 +19,6 @@ export class AuthResolver {
   constructor(private authService: AuthService) {}
 
   @Query(() => LoginOutput)
-  @UseGuards(GqlAuthGuard)
   login(@Args('data') data: LoginUserInput) {
     return this.authService.login(data);
   }

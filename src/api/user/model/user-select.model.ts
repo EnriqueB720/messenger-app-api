@@ -1,3 +1,5 @@
+import { ContactSelect } from "src/api/contact/model";
+
 interface UserPrismaSelect {
   id?: boolean;
   uuid?: boolean;
@@ -6,6 +8,8 @@ interface UserPrismaSelect {
   phoneNumber?: boolean;
   username?: boolean;
   fullName?: boolean;
+  language?: boolean;
+  contacts?: ContactSelect;
 }
 
 export interface UserSelect {
