@@ -47,12 +47,10 @@ export class ChatService {
       const chatsId = await this.prismaService.contact.findMany({
         where: {
           fullName: { contains: name },
-          user: {
-            id: userId
-          }
+          userId
         },
         select: {
-          contactUser: {
+          user: {
             select: {
               chatParticipants: {
                 select: {
@@ -69,8 +67,10 @@ export class ChatService {
         }
       })
 
+      console.log(...chatsId, userId);
+
       const chatIdsOfNonGroupChats = chatsId.map(c => {
-        const nonGroupChatParticipant = c.contactUser.chatParticipants.find(cp => {
+        const nonGroupChatParticipant = c.user.chatParticipants.find(cp => {
           return cp.chat.isGroup === false;
         });
         if (nonGroupChatParticipant) {
@@ -95,7 +95,7 @@ export class ChatService {
           ...where,
           OR: [
             { AND: [{ name: { contains: name } }, { participants: { some: { userId: userId } } }] },
-            { AND: [{ isGroup: false }, { id: { in: chatIdsOfNonGroupChats } }] }
+            { AND: [{ isGroup: false }, { id: { in: chatIdsOfNonGroupChats } }, { participants:  { some: { userId: userId } } }] }
           ]
         }
       });
