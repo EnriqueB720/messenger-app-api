@@ -19,7 +19,7 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async validateUser(email: string, password: string): Promise<User | null> {
     try {
@@ -49,31 +49,39 @@ export class AuthService {
         },
       );
 
+      if (!user) {
+        throw new Error('Email is incorrect');
+      }
+
       const userPassword = await this.userService.findUserPassword({
         where: { email },
       });
 
       const valid = await bcrypt.compare(password, userPassword);
 
+      if (!valid) {
+        throw new Error('Invalid password');
+      }
+
       return user && valid ? user : null;
     } catch (error) {
-      console.log(error);
+      throw new Error(error);
     }
   }
 
-  async login({email, password}: LoginUserInput) {
+  async login({ email, password }: LoginUserInput) {
 
     const user = await this.validateUser(email, password);
-    
-    if(!user) return null;
+
+    if (!user) return null;
     return {
       access_token: this.jwtService.sign({
         email: user.email,
         sub: user.uuid,
         role: user.type,
-        expiresIn: 60 * 5,
+        expiresIn: 60 * 60 * 1000,
       }),
-      expiresAt: new Date(Date.now() + 60 * 5),
+      expiresAt: new Date(Date.now() + 60 * 60 * 1000),
       user,
     } as LoginOutput;
   }
@@ -101,5 +109,50 @@ export class AuthService {
         ...select,
       },
     );
+  }
+
+  async refreshUser(token: string) {
+
+    let token_decoded = this.jwtService.decode(token);
+
+    if (new Date() > new Date(Date.now() + token_decoded.expiresIn)) {
+      return null;
+    } else {
+
+      let user = await this.userService.findOne({
+        where: {
+          email: token_decoded.email,
+        }
+      },
+        {
+          select: {
+            id: true,
+            uuid: true,
+            email: true,
+            type: true,
+            username: true,
+            fullName: true,
+            phoneNumber: true,
+            language: true,
+            contacts: {
+              select: {
+                fullName: true,
+                contactUserId: true
+              }
+            }
+          },
+        });
+
+      return {
+        access_token: this.jwtService.sign({
+          email: user.email,
+          sub: user.uuid,
+          role: user.type,
+          expiresIn: '1h',
+        }),
+        expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+        user,
+      } as LoginOutput;
+    }
   }
 }

@@ -93,6 +93,7 @@ type Query {
   ChatParticipant(where: ChatParticipantWhereUniqueInput!): [ChatParticipant!]!
   userMessageStatus(skip: Int, take: Int, cursor: UserMessageStatusWhereUniqueInput, orderBy: UserMessageStatusOrderByInput, where: UserMessageStatusWhereInput): [UserMessageStatus!]!
   login(data: LoginUserInput!): LoginOutput!
+  refreshUser(data: String!): LoginOutput!
 }
 
 input UserWhereInput {

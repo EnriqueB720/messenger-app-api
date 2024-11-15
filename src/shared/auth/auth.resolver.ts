@@ -30,4 +30,9 @@ export class AuthResolver {
   ) {
     return this.authService.signup(data, fields);
   }
+
+  @Query(() => LoginOutput)
+  refreshUser(@Args('data') data: string) {
+    return this.authService.refreshUser(data);
+  }
 }

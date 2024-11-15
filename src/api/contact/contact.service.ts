@@ -95,6 +95,8 @@ export class ContactService {
       if (!newChat) {
         throw new BadRequestException("Contact couldn't get created");
       }
+    }else{
+      throw new BadRequestException("Contact already exists");
     }
 
     return this.prismaService.contact.create({
