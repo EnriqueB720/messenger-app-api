@@ -44,41 +44,45 @@ export class ChatService {
   ): Promise<Chat[]> {
 
     if (name) {
-      const chatsId = await this.prismaService.contact.findMany({
+      const contactsId = await this.prismaService.contact.findMany({
         where: {
           fullName: { contains: name },
-          userId
+          userId,
         },
         select: {
-          user: {
-            select: {
-              chatParticipants: {
-                select: {
-                  chat: {
-                    select: {
-                      id: true,
-                      isGroup: true
-                    }
-                  }
-                }
-              }
+          contactUser:{
+            select:{
+              id: true
             }
           }
         }
+      });
+
+      let contactIds: number[] = [];
+      
+      contactsId.forEach(contact => {
+       contactIds.push(contact.contactUser.id);
       })
 
-      console.log(...chatsId, userId);
-
-      const chatIdsOfNonGroupChats = chatsId.map(c => {
-        const nonGroupChatParticipant = c.user.chatParticipants.find(cp => {
-          return cp.chat.isGroup === false;
-        });
-        if (nonGroupChatParticipant) {
-          return nonGroupChatParticipant.chat.id;
+      const chatsId = await this.prismaService.chat.findMany({
+        where: {
+          participants: {
+            some: {
+                userId: { in: contactIds},
+            }
+          },
+          isGroup: false
+        },
+        select:{
+          id: true
         }
-        return null;
-      }).filter(id => id !== null);
+      });
 
+      const chatsIds: number[] = [];
+
+      chatsId.forEach(chatId => {
+        chatsIds.push(chatId.id);
+      });
 
       return this.prismaService.chat.findMany({
         ...args,
@@ -95,7 +99,7 @@ export class ChatService {
           ...where,
           OR: [
             { AND: [{ name: { contains: name } }, { participants: { some: { userId: userId } } }] },
-            { AND: [{ isGroup: false }, { id: { in: chatIdsOfNonGroupChats } }, { participants:  { some: { userId: userId } } }] }
+            { AND: [{ isGroup: false }, { id: { in: chatsIds } }, { participants:  { some: { userId: userId } } }] }
           ]
         }
       });
