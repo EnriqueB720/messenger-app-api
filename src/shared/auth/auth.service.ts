@@ -79,7 +79,8 @@ export class AuthService {
         email: user.email,
         sub: user.uuid,
         role: user.type,
-        expiresIn: 60 * 60 * 1000,
+        expiresIn: '1h',
+        expiresAt: new Date(Date.now() + 60 * 60 * 1000),
       }),
       expiresAt: new Date(Date.now() + 60 * 60 * 1000),
       user,
@@ -115,7 +116,7 @@ export class AuthService {
 
     let token_decoded = this.jwtService.decode(token);
 
-    if (new Date() > new Date(Date.now() + token_decoded.expiresIn)) {
+    if (new Date() > new Date(token_decoded.expiresAt)) {
       return null;
     } else {
 
@@ -149,6 +150,7 @@ export class AuthService {
           sub: user.uuid,
           role: user.type,
           expiresIn: '1h',
+          expiresAt: new Date(Date.now() + 60 * 60 * 1000)
         }),
         expiresAt: new Date(Date.now() + 60 * 60 * 1000),
         user,
