@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { UserMessageStatus, UserMessageStatusSelect } from './model';
 
-import { UserMessageStatusArgs } from './dto';
+import { UpdateUserMessageStatus, UserMessageStatusArgs } from './dto';
 
 import { PrismaService } from '@prisma-datasource';
 
@@ -18,6 +18,27 @@ export class UserMessageStatusService {
       where,
       select,
     });
+  }
+
+  public async update(
+     data: UpdateUserMessageStatus,
+     { select }: UserMessageStatusSelect,
+  ) : Promise<UserMessageStatus>{
+
+    return this.prismaService.userMessageStatus.update({
+      where : { 
+        userId_messageId: {
+          messageId: data.messageId,
+          userId: data.userId
+        }
+      },
+      data: {
+        isRead: data.isRead,
+        isReceived: data.isReceived,
+        isFavorite: data.isFavorite
+      },
+      select
+    })
   }
 
 }

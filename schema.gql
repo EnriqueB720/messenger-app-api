@@ -219,6 +219,7 @@ type Mutation {
   createDirectMessage(data: DirectMessageCreateInput!): Message!
   createGroupMessage(data: GroupMessageCreateInput!): Message!
   createNewGroupParticipant(data: ChatParticipantCreateInput!): ChatParticipant!
+  updateMessageStatus(data: UpdateUserMessageStatus!): UserMessageStatus!
   signup(data: SignUpInput!): User!
 }
 
@@ -291,6 +292,14 @@ input ChatCreateNestedOneWithoutParticipantsInput {
 
 input UserCreateNestedOneWithoutChatParticipantsInput {
   connect: UserWhereUniqueInput!
+}
+
+input UpdateUserMessageStatus {
+  messageId: Float
+  userId: Float
+  isRead: Boolean
+  isReceived: Boolean
+  isFavorite: Boolean
 }
 
 input SignUpInput {
